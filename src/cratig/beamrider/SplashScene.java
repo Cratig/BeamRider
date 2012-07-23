@@ -18,6 +18,7 @@ public class SplashScene extends Scene {
 		Text title1 = new Text(0, 0, activity.mFont, activity.getString(R.string.splashTitle_1), activity.getVertexBufferObjectManager());
 		Text title2 = new Text(0, 0, activity.mFont, activity.getString(R.string.splashTitle_2), activity.getVertexBufferObjectManager());
 		
+		
 		title1.setPosition(-title1.getWidth(), activity.camera.getHeight() /2);
 		title2.setPosition(activity.camera.getWidth(), activity.camera.getHeight() / 2);
 		
