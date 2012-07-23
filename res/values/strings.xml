@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">BeamRider</string>
+    <string name="hello_world">Hello world!</string>
+
+<string name="splashTitle_1">Beam</string>
+<string name="splashTitle_2">Rider</string>
+
+</resources>
