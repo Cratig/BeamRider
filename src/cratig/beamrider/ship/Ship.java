@@ -1,7 +1,11 @@
-package cratig.beamrider;
+package cratig.beamrider.ship;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.primitive.Rectangle;
+
+import cratig.beamrider.GameScene;
+import cratig.beamrider.MainActivity;
 
 public class Ship {
 	public Rectangle sprite;
@@ -58,6 +62,30 @@ public class Ship {
 			
 			sprite.setPosition(newX, sprite.getY());
 		}
-
+	}
+	
+	public void shoot() {		
+		if (!moveable) {
+			return;
+		}
+		
+		GameScene scene = (GameScene) MainActivity.getSharedInstance().currentScene;
+		
+		ShipBullet bullet = ShipBulletPool.sharedShipBulletPool().obtainPoolItem();
+		
+		bullet.sprite.setPosition((sprite.getX() + (sprite.getWidth() / 2)), sprite.getY());
+		
+		MoveYModifier yModifier = new MoveYModifier(1.5f, bullet.sprite.getY(), -bullet.sprite.getHeight());
+		
+		bullet.sprite.setVisible(true);
+		bullet.sprite.detachSelf();
+		
+		scene.attachChild(bullet.sprite);
+		scene.shipBulletList.add(bullet);
+		
+		bullet.sprite.registerEntityModifier(yModifier);
+		
+		scene.shipBulletCount++;
+		
 	}
 }

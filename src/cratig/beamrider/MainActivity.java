@@ -21,7 +21,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	private static final int CAMERA_HEIGHT = 480;
 
 	// Define camera
-	Camera camera;
+	public Camera camera;
 
 	// Define Scenes
 	public Scene currentScene;
