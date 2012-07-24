@@ -47,7 +47,7 @@ public class SplashScene extends Scene {
 		title2.registerEntityModifier(new RotationAtModifier(2.0f, 85.0f, 0.0f,
 				0.0f, this.getRotationCenterY()));
 
-		DelayModifier delayModifier = new DelayModifier(4,
+		DelayModifier delayModifier = new DelayModifier(2,
 
 		new IEntityModifier.IEntityModifierListener() {
 

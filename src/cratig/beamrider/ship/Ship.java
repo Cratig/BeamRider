@@ -3,6 +3,7 @@ package cratig.beamrider.ship;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import cratig.beamrider.MainActivity;
 import cratig.beamrider.scenes.GameScene;
@@ -75,7 +76,7 @@ public class Ship {
 		
 		bullet.sprite.setPosition((sprite.getX() + (sprite.getWidth() / 2)), sprite.getY());
 		
-		MoveYModifier yModifier = new MoveYModifier(1.5f, bullet.sprite.getY(), -bullet.sprite.getHeight());
+		MoveYModifier yModifier = new MoveYModifier(2.5f, bullet.sprite.getY(), -bullet.sprite.getHeight(), EaseCubicOut.getInstance());
 		
 		bullet.sprite.setVisible(true);
 		bullet.sprite.detachSelf();
