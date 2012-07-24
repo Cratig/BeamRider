@@ -3,6 +3,7 @@ package cratig.beamrider;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import cratig.beamrider.scenes.GameScene;
 
 public class SensorListener implements SensorEventListener {
 	static SensorListener instance;

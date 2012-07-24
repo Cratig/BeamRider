@@ -13,6 +13,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.graphics.Typeface;
+import cratig.beamrider.scenes.SplashScene;
 
 public class MainActivity extends SimpleBaseGameActivity {
 
@@ -33,7 +34,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	private EngineOptions engineOptions;
 
 	// Define font
-	Font mFont;
+	public Font mFont;
 
 	// Test sprite
 	BitmapTextureAtlas bitmapTextureAtlas;

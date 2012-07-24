@@ -1,4 +1,4 @@
-package cratig.beamrider;
+package cratig.beamrider.scenes;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,6 +12,9 @@ import org.andengine.ui.activity.BaseGameActivity;
 
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import cratig.beamrider.GameLoopUpdateHandler;
+import cratig.beamrider.MainActivity;
+import cratig.beamrider.SensorListener;
 import cratig.beamrider.ship.Ship;
 import cratig.beamrider.ship.ShipBullet;
 import cratig.beamrider.ship.ShipBulletPool;
@@ -20,7 +23,7 @@ import cratig.beamrider.ship.ShipBulletTimer;
 public class GameScene extends Scene implements IOnSceneTouchListener {
 	public Ship ship;
 	Camera camera;
-	float accelerometerSpeedX;
+	public float accelerometerSpeedX;
 	private SensorManager sensorManager;
 
 	public LinkedList<ShipBullet> shipBulletList;

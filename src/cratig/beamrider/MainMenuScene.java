@@ -6,6 +6,8 @@ import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
 
+import cratig.beamrider.scenes.GameScene;
+
 public class MainMenuScene extends MenuScene implements
 		IOnMenuItemClickListener {
 

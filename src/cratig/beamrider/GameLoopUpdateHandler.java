@@ -2,6 +2,8 @@ package cratig.beamrider;
 
 import org.andengine.engine.handler.IUpdateHandler;
 
+import cratig.beamrider.scenes.GameScene;
+
 public class GameLoopUpdateHandler implements IUpdateHandler{
 
 	@Override

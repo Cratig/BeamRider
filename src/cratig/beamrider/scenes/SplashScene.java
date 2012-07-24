@@ -1,13 +1,18 @@
-package cratig.beamrider;
+package cratig.beamrider.scenes;
 
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.DelayModifier;
+import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.RotationAtModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
-import org.andengine.entity.modifier.*;
-import org.andengine.entity.*;
-import org.andengine.util.modifier.*;
+import org.andengine.util.modifier.IModifier;
+
+import cratig.beamrider.MainActivity;
+import cratig.beamrider.MainMenuScene;
+import cratig.beamrider.R;
 
 public class SplashScene extends Scene {
 
@@ -47,11 +52,11 @@ public class SplashScene extends Scene {
 		new IEntityModifier.IEntityModifierListener() {
 
 			@Override
-			public void onModifierStarted(IModifier modifier, IEntity entity) {
+			public void onModifierStarted(IModifier<IEntity> modifier, IEntity entity) {
 
 			}
 
-			public void onModifierFinished(IModifier modifier, IEntity entity) {
+			public void onModifierFinished(IModifier<IEntity> modifier, IEntity entity) {
 				activity.setCurrentScene(new MainMenuScene());
 			}
 		}

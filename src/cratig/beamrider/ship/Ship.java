@@ -4,8 +4,8 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.primitive.Rectangle;
 
-import cratig.beamrider.GameScene;
 import cratig.beamrider.MainActivity;
+import cratig.beamrider.scenes.GameScene;
 
 public class Ship {
 	public Rectangle sprite;
