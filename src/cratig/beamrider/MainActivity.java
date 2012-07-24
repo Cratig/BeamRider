@@ -24,7 +24,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	Camera camera;
 
 	// Define Scenes
-	private Scene currentScene;
+	public Scene currentScene;
 
 	// Define instance
 	public static MainActivity instance;
@@ -47,7 +47,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 		engineOptions = new EngineOptions(true,
 				ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
 						CAMERA_WIDTH, CAMERA_HEIGHT), this.camera);
-		
+
 		return this.engineOptions;
 	}
 
@@ -64,14 +64,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 
 		currentScene = new SplashScene();
-		
+
 		return currentScene;
 	}
-	
+
 	public static MainActivity getSharedInstance() {
 		return instance;
 	}
-	
+
 	public void setCurrentScene(Scene scene) {
 		currentScene = scene;
 		getEngine().setScene(this.currentScene);
