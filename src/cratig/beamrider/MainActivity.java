@@ -1,5 +1,8 @@
 package cratig.beamrider;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -8,11 +11,18 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.bitmap.BitmapTexture;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.adt.io.in.IInputStreamOpener;
+import org.andengine.util.debug.Debug;
 
 import android.graphics.Typeface;
+import cratig.beamrider.scenes.GameScene;
 import cratig.beamrider.scenes.SplashScene;
 
 public class MainActivity extends SimpleBaseGameActivity {
@@ -39,6 +49,9 @@ public class MainActivity extends SimpleBaseGameActivity {
 	// Test sprite
 	BitmapTextureAtlas bitmapTextureAtlas;
 	TextureRegion playerTextureRegion;
+	
+	public ITexture enemyTexture;
+	public ITextureRegion enemyTextureRegion;
 
 	public EngineOptions onCreateEngineOptions() {
 		instance = this;
@@ -58,6 +71,24 @@ public class MainActivity extends SimpleBaseGameActivity {
 				this.getTextureManager(), 256, 256,
 				Typeface.create(Typeface.MONOSPACE, Typeface.BOLD_ITALIC), 64);
 		mFont.load();
+		
+		try {
+			enemyTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
+				
+				@Override
+				public InputStream open() throws IOException {
+					return getAssets().open("face_box.png");
+				}
+			});
+			
+			enemyTexture.load();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Debug.e(e);
+		}
+		
+		enemyTextureRegion = TextureRegionFactory.extractFromTexture(enemyTexture);
 	}
 
 	@Override
@@ -78,4 +109,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 		getEngine().setScene(this.currentScene);
 	}
 
+	@Override
+	public void onBackPressed() {
+		if (currentScene instanceof GameScene) {
+			((GameScene) currentScene).detach();
+		}
+		
+		currentScene = null;
+		SensorListener.instance = null;
+		super.onBackPressed();
+	}
 }

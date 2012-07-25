@@ -4,23 +4,23 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.ParallelEntityModifier;
-import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.ui.activity.BaseGameActivity;
-import org.andengine.util.modifier.ease.EaseCircularOut;
 
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import cratig.beamrider.GameLoopUpdateHandler;
 import cratig.beamrider.MainActivity;
 import cratig.beamrider.SensorListener;
+import cratig.beamrider.enemy.Enemy;
+import cratig.beamrider.enemy.EnemyLayer;
+import cratig.beamrider.enemy.EnemyPool;
 import cratig.beamrider.ship.Ship;
 import cratig.beamrider.ship.ShipBullet;
+import cratig.beamrider.ship.ShipBulletPool;
 import cratig.beamrider.ship.ShipBulletTimer;
 
 public class GameScene extends Scene implements IOnSceneTouchListener {
@@ -31,17 +31,23 @@ public class GameScene extends Scene implements IOnSceneTouchListener {
 
 	public LinkedList<ShipBullet> shipBulletList;
 	public int shipBulletCount = 0;
+	int missCount = 0;;
 
 	public GameScene() {
 		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 
 		camera = MainActivity.getSharedInstance().camera;
 
+		//Setup player
 		ship = Ship.getSharedInstance();
 		attachChild(ship.sprite);
 
 		shipBulletList = new LinkedList<ShipBullet>();
-
+		
+		//Setup enemies
+		attachChild(new EnemyLayer(15));
+		
+		
 		MainActivity.getSharedInstance().setCurrentScene(this);
 		sensorManager = (SensorManager) MainActivity.getSharedInstance()
 				.getSystemService(BaseGameActivity.SENSOR_SERVICE);
@@ -52,15 +58,15 @@ public class GameScene extends Scene implements IOnSceneTouchListener {
 				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
 				SensorManager.SENSOR_DELAY_GAME);
 
-		registerUpdateHandler(new GameLoopUpdateHandler());
 		setOnSceneTouchListener(this);
 
+		resetScene();
 	}
 
 	public void moveShip() {
 		ship.moveShip(accelerometerSpeedX);
 	}
-
+	
 	@Override
 	public boolean onSceneTouchEvent(Scene scene, TouchEvent touchEvent) {
 		synchronized (this) {
@@ -76,27 +82,68 @@ public class GameScene extends Scene implements IOnSceneTouchListener {
 		return true;
 	}
 
-	public void shipBulletCleaner() {
+	public void sceneCleaner() {
 		synchronized (this) {
-			Iterator<ShipBullet> iterator = shipBulletList.iterator();
-
-			while (iterator.hasNext()) {
-				ShipBullet bullet = iterator.next();
-
-				if (bullet.sprite.getY() <= bullet.sprite.getHeight()) {
+			Iterator<Enemy> enemyIterator = EnemyLayer.getIterator();
+			
+			while (enemyIterator.hasNext()) {
+				Enemy enemy = enemyIterator.next();
+				
+				Iterator<ShipBullet> bulletIterator = shipBulletList.iterator();
+				
+				while (bulletIterator.hasNext()) {
+					ShipBullet bullet = bulletIterator.next();
 					
-					ScaleModifier expandXModifier = new ScaleModifier(0.5f, 1.0f, 8.0f, 1.0f, 0.6f, EaseCircularOut.getInstance());
-					AlphaModifier alphaModifier = new AlphaModifier(0.5f, 1.0f, 0.0f);
+					if (bullet.sprite.getY() <= bullet.sprite.getHeight()) {
+						ShipBulletPool.sharedShipBulletPool().recyclePoolItem(bullet);
+						bulletIterator.remove();
+						continue;
+					}
 					
-					ParallelEntityModifier parModifier = new ParallelEntityModifier(expandXModifier, alphaModifier);
-					
-					bullet.sprite.registerEntityModifier(parModifier);
-					
-					//ShipBulletPool.sharedShipBulletPool().recyclePoolItem(bullet);
-					//iterator.remove();
-					continue;
+					if (bullet.sprite.collidesWith(enemy.sprite)) {
+						//It's a hit!
+						if (!enemy.gotHit()) {
+							EnemyLayer.getSharedInstance().createImageExplosion(enemy.sprite.getX(), enemy.sprite.getY(), enemy.sprite.getParent(), MainActivity.getSharedInstance());
+							EnemyPool.sharedEnemyPool().recyclePoolItem(enemy);
+							enemyIterator.remove();
+						}
+						
+						ShipBulletPool.sharedShipBulletPool().recyclePoolItem(bullet);
+						bulletIterator.remove();
+						break;
+					}
 				}
 			}
 		}
+		
+		if (EnemyLayer.isEmtpy()) {
+			setChildScene(new ResultScene(camera));
+			clearUpdateHandlers();
+		}
+	}
+	
+	public void resetScene() {
+		missCount = 0;
+		shipBulletCount = 0;
+		
+		ship.restart();
+		EnemyLayer.purgeAndRestart();
+		clearChildScene();
+		
+		registerUpdateHandler(new GameLoopUpdateHandler());
+	}
+	
+	public void detach() {
+		clearUpdateHandlers();
+		for (ShipBullet bullet : shipBulletList) {
+			ShipBulletPool.sharedShipBulletPool().recyclePoolItem(bullet);
+		}
+		
+		shipBulletList.clear();
+		detachChildren();
+		Ship.instance = null;
+		EnemyPool.instance = null;
+		ShipBulletPool.instance = null;
+		clearUpdateHandlers();
 	}
 }

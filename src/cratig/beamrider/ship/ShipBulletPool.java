@@ -29,5 +29,7 @@ public class ShipBulletPool extends GenericPool<ShipBullet>{
 		bullet.sprite.setVisible(false);
 		bullet.sprite.detachSelf();
 	}
+	
+	
 
 }
