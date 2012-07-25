@@ -23,7 +23,7 @@ public class ShipBulletPool extends GenericPool<ShipBullet>{
 		return new ShipBullet();
 	}
 	
-	protected void onHandleRecucleItem(final ShipBullet bullet) {
+	protected void onHandleRecycleItem(final ShipBullet bullet) {
 		bullet.sprite.clearEntityModifiers();
 		bullet.sprite.clearUpdateHandlers();
 		bullet.sprite.setVisible(false);
