@@ -72,16 +72,7 @@ public class EnemyLayer extends Entity {
 
 			attachChild(enemy.sprite);
 
-			enemy.sprite.registerEntityModifier(
-					new LoopEntityModifier(
-							new SequenceEntityModifier(
-									new MoveModifier(2, enemy.sprite.getX(), +5, enemy.sprite.getY(), finalY),
-									new MoveModifier(2, enemy.sprite.getX(), finalX, enemy.sprite.getY(), -5),
-									new MoveModifier(2, enemy.sprite.getX(), finalX, enemy.sprite.getY(), +5),
-									new MoveModifier(2, enemy.sprite.getX(), -5, enemy.sprite.getY(), finalY)
-									)
-							)
-					);
+			enemy.sprite.registerEntityModifier(new MoveModifier(2, enemy.sprite.getX(), finalX,enemy.sprite.getY(), finalY));
 
 			enemies.add(enemy);
 		}
